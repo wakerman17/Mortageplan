@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+<head>
+    <title>Tournament</title>
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <script src="js/angular.js"></script>
+    <script src="js/exercise.js"></script>
+</head>
+
+<body ng-app="exercise">
+<div ng-if="tournaments.length > 0">
+    <h3>Tournaments</h3>
+    <div ng-repeat="tournament in tournaments">
+        <div class="tournament">Tournament</div>
+        <span>Id: {{tournament.id}}</span>
+        <span>Reward amount: {{tournament.reward_amount}}</span>
+        <button ng-click="editTournament(tournament)">Edit</button>
+        <button ng-click="prepareAddPlayer(tournament)">Add player</button>
+        <button ng-click="removeTournament(tournament.id)">Remove</button>
+        <div ng-if="tournament.players.length > 0">
+            <div>Players</div>
+            <!-- Player div is shown on each tournament (Even if no player is in the tournament) -->
+            <div ng-repeat="player in tournament.players">
+                <span>Id: {{player.id}}</span>
+                <span>Name: {{player.name}}</span>
+                <button ng-click="removePlayerFromTournament(tournament.id, player.id)">Remove</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <h5>Add tournament</h5>
+    <div>
+	    <form name="addTournamentForm">
+	        Reward amount: <input name="rewardAmount" ng-model="rewardAmount" ng-required="true" ng-pattern="/^[0-9]+$/"/>
+	        <span ng-show="addTournamentForm.rewardAmount.$error.pattern">Only numbers allowed</span>
+	        <button ng-show="!addTournamentForm.rewardAmount.$error.pattern && !addTournamentForm.rewardAmount.$error.required" ng-click="addTournament(rewardAmount)">Add Tournament</button>
+	    </form>
+    </div>
+</div>
+<div ng-if="editTournamentId != null">
+    <h5>Edit tournament</h5>
+    <div>
+    	<form name="editTournamentForm">
+	        <div>Id: {{editTournamentId}}</div>
+	        Reward amount: <input name="editRewardAmount" ng-model="editRewardAmount" ng-pattern="/^[0-9]+$/" ng-required="true"/>
+	        <span ng-show="editTournamentForm.editRewardAmount.$error.pattern">Only numbers allowed</span>
+	        <button ng-show="!editTournamentForm.editRewardAmount.$error.pattern  && !editTournamentForm.editRewardAmount.$error.required" ng-click="updateTournament(editTournamentId, editRewardAmount)">Update Tournament</button>
+	     </form>   
+    </div>
+</div>
+<div ng-if="playerTournamentId != null">
+    <h5>Add player into tournament</h5>
+    <div>
+    	<form name="addPlayerForm">
+	        <div>Id: {{playerTournamentId}}</div>
+	        Player: <input name="playerName" ng-model="playerName" ng-required="true"/>
+	        <button ng-show="!addPlayerForm.playerName.$error.required" ng-click="addPlayerIntoTournament(playerTournamentId, playerName)">Add Player</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
